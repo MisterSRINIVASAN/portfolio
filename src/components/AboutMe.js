@@ -32,8 +32,8 @@ export default function AboutMe() {
           
           <p>
             Based in Chennai, India, I specialize in designing and developing robust, 
-            scalable web applications. My expertise spans across <span className="text-white">Python, 
-            React, Node.js, and AI-driven solutions</span>. I thrive on turning complex 
+            scalable web applications. Currently, I am working as an <span className="text-cyan-400 font-semibold">ERP Developer Intern at Logitech</span>, where I optimize enterprise workflows and integrate scalable solutions. My technical expertise spans across <span className="text-white">Python, 
+            React, Node.js, and AI-driven systems</span>. I thrive on turning complex 
             logic into seamless digital experiences.
           </p>
 

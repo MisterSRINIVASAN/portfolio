@@ -7,11 +7,18 @@ import SkillsSection from "./components/SkillsSection";
 import Experience from "./components/Experience";
 import { Link } from "react-scroll";
 import { Menu, X } from "lucide-react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence } from "framer-motion";
+import ProjectDetail from "./components/ProjectDetail";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  
+  // Use MotionValues instead of React state for mouse position to prevent re-renders
+  const mouseX = useMotionValue(typeof window !== 'undefined' ? window.innerWidth / 2 : 0);
+  const mouseY = useMotionValue(typeof window !== 'undefined' ? window.innerHeight / 2 : 0);
+
   const { scrollYProgress } = useScroll();
   
   const scaleX = useSpring(scrollYProgress, {
@@ -20,16 +27,42 @@ function App() {
     restDelta: 0.001
   });
 
+  // Smooth springs for cursor followers
+  const cursorX = useSpring(mouseX, { stiffness: 150, damping: 15, mass: 0.5 });
+  const cursorY = useSpring(mouseY, { stiffness: 150, damping: 15, mass: 0.5 });
+  const dotX = useSpring(mouseX, { stiffness: 300, damping: 20, mass: 0.2 });
+  const dotY = useSpring(mouseY, { stiffness: 300, damping: 20, mass: 0.2 });
+
+  // Transforms for background grid
+  const bgRotateX = useTransform(mouseY, y => {
+    if (isTouchDevice) return 0;
+    const height = typeof window !== 'undefined' ? window.innerHeight : 1000;
+    return (y / height - 0.5) * 5;
+  });
+  const bgRotateY = useTransform(mouseX, x => {
+    if (isTouchDevice) return 0;
+    const width = typeof window !== 'undefined' ? window.innerWidth : 1000;
+    return (x / width - 0.5) * -5;
+  });
+
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      // Throttled mouse position update
-      requestAnimationFrame(() => {
-        setMousePos({ x: e.clientX, y: e.clientY });
-      });
+    // Detect touch device
+    const checkTouch = () => {
+      return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
     };
+    const touch = checkTouch();
+    setIsTouchDevice(touch);
+
+    if (touch) return; // Disable mouse tracking on touch devices
+
+    const handleMouseMove = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [mouseX, mouseY]);
 
   const navLinks = [
     { name: "About", to: "about" },
@@ -45,12 +78,11 @@ function App() {
       {/* 3D Perspective Grid Background */}
       <div className="fixed inset-0 pointer-events-none z-0" style={{ perspective: "1500px" }}>
         <motion.div 
-          className="absolute inset-[-10%] bg-grid opacity-20"
-          animate={{
-            rotateX: (mousePos.y / window.innerHeight - 0.5) * 5,
-            rotateY: (mousePos.x / window.innerWidth - 0.5) * -5,
+          className="absolute inset-[-10%] bg-grid opacity-20 will-change-transform"
+          style={{
+            rotateX: bgRotateX,
+            rotateY: bgRotateY,
           }}
-          transition={{ type: "spring", stiffness: 50, damping: 30 }}
         />
       </div>
 
@@ -122,15 +154,44 @@ function App() {
         )}
       </nav>
 
+      {/* Custom Cursor */}
+      {!isTouchDevice && (
+        <>
+          <motion.div
+            className="fixed top-0 left-0 w-8 h-8 rounded-full border border-cyan-400 pointer-events-none z-[999] mix-blend-difference hidden md:block will-change-transform"
+            style={{
+              x: useTransform(cursorX, x => x - 16),
+              y: useTransform(cursorY, y => y - 16),
+            }}
+          />
+          <motion.div
+            className="fixed top-0 left-0 w-2 h-2 rounded-full bg-fuchsia-500 pointer-events-none z-[1000] hidden md:block will-change-transform"
+            style={{
+              x: useTransform(dotX, x => x - 4),
+              y: useTransform(dotY, y => y - 4),
+            }}
+          />
+        </>
+      )}
+
       {/* Page Sections */}
-      <main className="relative z-10 w-full space-y-0 perspective-container">
-        <PortfolioHero mousePos={mousePos} />
+      <main className="relative z-10 w-full space-y-0 perspective-container cursor-none md:cursor-auto">
+        <PortfolioHero mouseX={mouseX} mouseY={mouseY} isTouchDevice={isTouchDevice} />
         <AboutMe />
         <SkillsSection />
         <Experience />
-        <Projects />
+        <Projects onProjectSelect={setSelectedProject} />
         <Contact />
       </main>
+
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectDetail 
+            project={selectedProject} 
+            onClose={() => setSelectedProject(null)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

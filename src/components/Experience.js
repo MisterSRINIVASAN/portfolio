@@ -3,6 +3,16 @@ import { motion } from "framer-motion";
 
 const experiences = [
   {
+    company: "Logitech",
+    role: "ERP Developer Intern",
+    period: "June 2026 – Present",
+    location: "Chennai, India",
+    description: [
+      "Developing and optimizing Enterprise Resource Planning (ERP) modules to streamline business processes.",
+      "Collaborating with cross-functional teams to integrate dynamic workflows and scalable solutions.",
+    ],
+  },
+  {
     company: "S.S.V Traders",
     role: "Web Developer Intern",
     period: "May 2024 – July 2024",

@@ -4,6 +4,20 @@ import { Github } from "lucide-react";
 
 const projects = [
   {
+    title: "Boutique Project",
+    tech: ["JavaScript", "React", "Tailwind CSS", "Framer Motion"],
+    description: "A modern e-commerce web application for a boutique clothing store.",
+    detailedDescription: "A full-featured, responsive boutique e-commerce application. Designed to deliver a premium shopping experience with smooth animations, dynamic product filtering, and an intuitive user interface tailored for fashion retail.",
+    features: [
+      "Dynamic product catalog with filtering and search",
+      "Responsive design optimized for mobile and desktop",
+      "Interactive shopping cart with state management",
+      "Premium aesthetic using Tailwind CSS and Framer Motion"
+    ],
+    githubLink: "https://github.com/MisterSRINIVASAN/Boutique-Project",
+    liveLink: "https://boutique-project-beta.vercel.app/"
+  },
+  {
     title: "Autonomous Research Agent",
     tech: ["Python", "FastAPI", "LangGraph", "React"],
     description: "An autonomous agent system for conducting intelligent research and data analysis.",
@@ -50,12 +64,6 @@ const projects = [
     tech: ["Python", "PyTorch", "Hugging Face"],
     description: "Integrated Hugging Face Transformers to create a text-to-image generation application.",
     githubLink: "https://github.com/MisterSRINIVASAN/IMAGE-GENERATOR"
-  },
-  {
-    title: "Boutique Project",
-    tech: ["JavaScript", "React", "Tailwind CSS"],
-    description: "A modern e-commerce web application for a boutique clothing store.",
-    githubLink: "https://github.com/MisterSRINIVASAN/Boutique-Project"
   },
   {
     title: "My Portfolio",
@@ -128,7 +136,13 @@ const themes = [
   }
 ];
 
-export default function Projects() {
+export default function Projects({ onProjectSelect }) {
+  const [isTouchDevice, setIsTouchDevice] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsTouchDevice(('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+  }, []);
+
   return (
     <section id="projects" className="section-padding bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
@@ -144,24 +158,30 @@ export default function Projects() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, index) => {
             const theme = themes[index % themes.length];
+            const isFeatured = index === 0;
             return (
-              <div key={index} className="group perspective-container">
+              <div key={index} className={`group perspective-container ${isFeatured ? 'md:col-span-2' : ''}`}>
                 <motion.div
-                  onClick={() => window.open(project.githubLink, '_blank')}
+                  onClick={() => onProjectSelect ? onProjectSelect(project) : window.open(project.githubLink, '_blank')}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: (index % 3) * 0.1 }}
-                  whileHover={{ 
-                    scale: 1.05,
-                    rotateX: index % 2 === 0 ? 8 : -8,
-                    rotateY: index % 2 === 0 ? -8 : 8,
-                    translateZ: 30
-                  }}
-                  className={`glass-card p-6 flex flex-col h-full border border-white/5 transition-all duration-500 cursor-pointer ${theme.hoverBorder} ${theme.hoverShadow}`}
+                  whileHover={!isTouchDevice ? { 
+                    scale: isFeatured ? 1.02 : 1.05,
+                    rotateX: isFeatured ? 0 : (index % 2 === 0 ? 8 : -8),
+                    rotateY: isFeatured ? 0 : (index % 2 === 0 ? -8 : 8),
+                    translateZ: isFeatured ? 10 : 30
+                  } : { scale: 1.02 }}
+                  className={`glass-card p-6 flex flex-col h-full transition-all duration-500 cursor-pointer ${theme.hoverBorder} ${theme.hoverShadow} ${isFeatured ? 'border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.15)] bg-emerald-500/5' : 'border-white/5'}`}
                 >
-                <h3 className={`text-xl font-bold text-white mb-3 transition-colors ${theme.titleHover}`}>
-                  {project.title}
+                <h3 className={`text-xl font-bold text-white mb-3 transition-colors ${theme.titleHover} flex items-center justify-between gap-2`}>
+                  <span>{project.title}</span>
+                  {project.liveLink && (
+                    <span className="px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded text-[10px] uppercase tracking-wider font-bold shrink-0 animate-pulse">
+                      Live
+                    </span>
+                  )}
                 </h3>
                 <p className="text-gray-400 text-sm mb-6 flex-grow leading-relaxed">
                   {project.description}

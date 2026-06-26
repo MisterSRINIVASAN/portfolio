@@ -25,7 +25,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl transition-all duration-300 relative;
+    @apply bg-[#151515] md:bg-white/[0.04] md:backdrop-blur-md border border-white/10 rounded-2xl transition-all duration-300 relative;
     transform-style: preserve-3d;
     backface-visibility: hidden;
   }
