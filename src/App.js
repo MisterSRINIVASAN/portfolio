@@ -175,7 +175,7 @@ function App() {
       )}
 
       {/* Page Sections */}
-      <main className="relative z-10 w-full space-y-0 perspective-container cursor-none md:cursor-auto">
+      <main className="relative z-10 w-full space-y-0 cursor-none md:cursor-auto">
         <PortfolioHero mouseX={mouseX} mouseY={mouseY} isTouchDevice={isTouchDevice} />
         <AboutMe />
         <SkillsSection />
