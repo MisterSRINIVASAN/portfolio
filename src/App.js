@@ -87,8 +87,8 @@ function App() {
       </div>
 
       {/* Subtle Background Glows */}
-      <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-fuchsia-500/[0.08] rounded-full blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-400/[0.08] rounded-full blur-[120px] pointer-events-none" />
+      <div className="hidden md:block fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-fuchsia-500/[0.08] rounded-full blur-[120px] pointer-events-none" />
+      <div className="hidden md:block fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-400/[0.08] rounded-full blur-[120px] pointer-events-none" />
       
       {/* Scroll Progress Bar */}
       <motion.div

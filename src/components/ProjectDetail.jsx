@@ -22,8 +22,8 @@ export default function ProjectDetail({ project, onClose }) {
       className="fixed inset-0 z-[100] bg-[#050505] overflow-y-auto"
     >
       {/* Background elements */}
-      <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-500/[0.05] rounded-full blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-500/[0.05] rounded-full blur-[120px] pointer-events-none" />
+      <div className="hidden md:block fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-500/[0.05] rounded-full blur-[120px] pointer-events-none" />
+      <div className="hidden md:block fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-500/[0.05] rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-6 py-12 md:py-24 relative z-10">
         <button
