@@ -74,7 +74,7 @@ function App() {
 
 
   return (
-    <div className="bg-[#050505] min-h-screen selection:bg-fuchsia-500/40 overflow-x-hidden relative">
+    <div className="bg-[#050505] min-h-screen selection:bg-fuchsia-500/40 relative">
       {/* Background Layer */}
       <div className="fixed inset-0 pointer-events-none z-0">
         {/* Mobile Static Grid */}

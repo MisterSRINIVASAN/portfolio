@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-[#050505] text-gray-100 selection:bg-fuchsia-500/40;
+    @apply bg-[#050505] text-gray-100 selection:bg-fuchsia-500/40 overflow-x-hidden;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     scroll-behavior: smooth;
   }
