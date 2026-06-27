@@ -75,15 +75,21 @@ function App() {
 
   return (
     <div className="bg-[#050505] min-h-screen selection:bg-fuchsia-500/40 overflow-x-hidden relative">
-      {/* 3D Perspective Grid Background */}
-      <div className="fixed inset-0 pointer-events-none z-0" style={{ perspective: "1500px" }}>
-        <motion.div 
-          className="absolute inset-[-10%] bg-grid opacity-20 will-change-transform"
-          style={{
-            rotateX: bgRotateX,
-            rotateY: bgRotateY,
-          }}
-        />
+      {/* Background Layer */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {/* Mobile Static Grid */}
+        <div className="md:hidden absolute inset-0 bg-grid opacity-10" />
+        
+        {/* Desktop 3D Grid */}
+        <div className="hidden md:block absolute inset-0" style={{ perspective: "1500px" }}>
+          <motion.div 
+            className="absolute inset-[-10%] bg-grid opacity-20"
+            style={{
+              rotateX: bgRotateX,
+              rotateY: bgRotateY,
+            }}
+          />
+        </div>
       </div>
 
       {/* Subtle Background Glows */}
